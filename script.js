@@ -1,4 +1,16 @@
 const DEFAULTLENGTH = 16;
+let hoverState = "black";
+
+// HOVER COLOR AND EFFECTS
+
+const blackBtn = document.querySelector("#blackBtn");
+blackBtn.addEventListener("click", () => hoverState = "black");
+const rainbowBtn = document.querySelector("#rainbowBtn");
+rainbowBtn.addEventListener("click", () => hoverState = "rainbow");
+const darkBtn = document.querySelector("#darkBtn");
+darkBtn.addEventListener("click", () => hoverState = "darken");
+
+// GRID CREATION
 
 function createGrid(n) {
     const container = document.querySelector("#container");
@@ -25,6 +37,7 @@ function createGrid(n) {
             row.push({ top: 1, left: 1, right: 1, bottom: 1 });
             const square = document.createElement("div");
             square.classList.add("squares");
+            square.dataset.opacity = 0;
 
             square.style.width = `${960 / n}px`;
             square.style.height = `${960 / n}px`;
@@ -37,21 +50,32 @@ function createGrid(n) {
             square.style.borderRightWidth = `${row[j].right}px`;
             square.style.borderBottomWidth = `${row[j].bottom}px`;
 
-            square.addEventListener("mouseenter", () => square.style.backgroundColor = "rgb(50, 50, 50)");
+            function changeColor(hoverState) {
+                if (hoverState == "black") square.style.backgroundColor = "rgb(50, 50, 50)";
+                else if (hoverState == "rainbow") {
+                    square.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+                }
+                else if (hoverState == "darken") {
+                    let opacity = parseFloat(square.dataset.opacity); 
+                    opacity = Math.min(opacity + 0.2, 1);            
+                    square.dataset.opacity = opacity;                
+                    square.style.backgroundColor = `rgba(0,0,0,${opacity})`;
+                }
+            }
 
+            square.addEventListener("mouseenter", () => changeColor(hoverState));
             container.appendChild(square);
         } 
         grid.push(row);
     }
 }
 
-
 const gridBtn = document.querySelector("#gridBtn");
 gridBtn.addEventListener("click", () => {
     let inputLength;
 
     do {
-        inputLength = Number(prompt("Enter grid dimension (Max 100)"));
+        inputLength = Number(prompt("Enter grid dimension (Max 100)", 16));
     } while (
         !Number.isFinite(inputLength) ||
         inputLength <= 0 ||              
@@ -63,4 +87,3 @@ gridBtn.addEventListener("click", () => {
 });
 
 createGrid(DEFAULTLENGTH);
-

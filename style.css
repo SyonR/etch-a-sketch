@@ -15,6 +15,7 @@ body {
     box-sizing: border-box;
     display: flex;
     margin: 10px 0px 20px 0px;
+    gap: 10px;
 }
 
 #container {
@@ -26,4 +27,5 @@ body {
 
 .squares {
     box-sizing: border-box;
+    background-color: rgba(0,0,0,0);
 }
